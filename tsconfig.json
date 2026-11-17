@@ -6,5 +6,5 @@
     "noEmit": true,
     "strict": false, "strictNullChecks": true
   },
-  "include": ["src/**/*.tsx", "components/**/*.js", "components/**/*.tsx", "context/**/*.js", "screens/**/*.js", "config/**/*.js", "utils/**/*.js", "App.js", "index.js"]
+  "include": ["src/**/*.tsx", "navigation/**/*.js", "components/**/*.js", "context/**/*.js", "screens/**/*.js", "config/**/*.js", "App.js", "index.js"]
 }

@@ -4,12 +4,5 @@ import { useAppTheme } from '../context/ThemeContext';
 
 export default function ThemeSwitch() {
   const { theme, toggleTheme } = useAppTheme();
-  return <Switch
-    accessibilityLabel="Dark Mode"
-    value={theme.isDark}
-    onValueChange={toggleTheme}
-    trackColor={{ false: '#D5CBE7', true: '#8751E8' }}
-    thumbColor="#FFFFFF"
-    {...(Platform.OS === 'web' ? { activeThumbColor: '#FFFFFF' } : {})}
-  />;
+  return <Switch accessibilityLabel="Dark Mode" value={theme.isDark} onValueChange={toggleTheme} trackColor={{ false: theme.border, true: theme.primary }} thumbColor="#FFFFFF" {...(Platform.OS === 'web' ? { activeThumbColor: '#FFFFFF' } : {})} />;
 }

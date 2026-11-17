@@ -1,39 +1,48 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { useAppTheme } from '../context/ThemeContext';
-import AppButton from '../components/AppButton';
-import ProfileField from '../components/ProfileField';
+import { StyleSheet, Text, View } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import Screen from '../components/Screen';
+import ActivityIntro from '../components/ActivityIntro';
+import ProfileField from '../components/ProfileField';
+import AppButton from '../components/AppButton';
+import { useAppTheme } from '../context/ThemeContext';
 
 export default function ActivityTwoScreen() {
   const { theme } = useAppTheme();
   const [name, setName] = useState('');
   const [course, setCourse] = useState('');
 
-  return (
-    <Screen eyebrow="STUDENT TOOLS" title="Student Profile" description="A little introduction. Your profile preview updates as you type.">
-      <ProfileField label="Full name" placeholder="e.g. Daisy Galope" value={name} onChangeText={setName} autoComplete="name" />
-      <ProfileField label="Course and section" placeholder="e.g. BSCS 4A" value={course} onChangeText={setCourse} />
-      <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }]}>
-        <Text style={[styles.caption, { color: theme.primary }]}>PROFILE PREVIEW</Text>
-        <View style={[styles.avatar, { backgroundColor: theme.tint }]}>
-          <Text style={[styles.initial, { color: theme.primary }]}>{name.trim().charAt(0).toUpperCase() || '?'}</Text>
-        </View>
-        <Text style={[styles.name, { color: theme.text }]}>{name.trim() || 'Your name goes here'}</Text>
-        <Text style={[styles.course, { color: theme.secondary }]}>{course.trim() || 'Add your course and section'}</Text>
+  const clearProfile = () => { setName(''); setCourse(''); };
+  return <Screen bottomInset contentStyle={{ maxWidth: 480 }}>
+    <ActivityIntro icon="person-outline" title="Student Profile" description="Enter your information below." />
+    <View style={styles.fields}>
+      <ProfileField icon="person-outline" label="Full name" placeholder="Enter your name" value={name} onChangeText={setName} autoComplete="name" />
+      <ProfileField icon="school-outline" label="Course and section" placeholder="e.g. BSCS 4A" value={course} onChangeText={setCourse} />
+    </View>
+    <View style={[styles.preview, { backgroundColor: theme.preview, borderColor: theme.border }]}>
+      <View style={styles.previewTitle}>
+        <Ionicons name="id-card-outline" size={25} color={theme.primary} />
+        <Text accessibilityRole="header" style={[styles.heading, { color: theme.text }]}>Profile Preview</Text>
       </View>
-      <AppButton title="Clear profile" onPress={() => { setName(''); setCourse(''); }} secondary />
-      <Text style={[styles.note, { color: theme.secondary }]}>This activity is a local preview. To change your dashboard name, visit Settings.</Text>
-    </Screen>
-  );
+      <View style={[styles.detail, { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: theme.border }]}>
+        <Text style={[styles.label, { color: theme.text }]}>Name:</Text>
+        <Text style={[styles.value, { color: theme.secondary }]}>{name.trim() || 'Not provided'}</Text>
+      </View>
+      <View style={styles.detail}>
+        <Text style={[styles.label, { color: theme.text }]}>Course:</Text>
+        <Text style={[styles.value, { color: theme.secondary }]}>{course.trim() || 'Not provided'}</Text>
+      </View>
+    </View>
+    <AppButton title="Clear Profile" icon="trash-outline" onPress={clearProfile} />
+  </Screen>;
 }
 
 const styles = StyleSheet.create({
-  card: { borderRadius: 22, padding: 24, alignItems: 'center', borderWidth: 1, gap: 14, marginTop: 8 },
-  caption: { fontSize: 11, letterSpacing: 2, fontWeight: '800' },
-  avatar: { width: 72, height: 72, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
-  initial: { fontSize: 32, fontWeight: '700' },
-  name: { fontSize: 23, fontWeight: '700', textAlign: 'center' },
-  course: { fontSize: 15, lineHeight: 23, textAlign: 'center' },
-  note: { fontSize: 14, lineHeight: 22 },
+  fields: { gap: 13 },
+  preview: { padding: 18, borderWidth: 1, borderRadius: 17, marginVertical: 9 },
+  previewTitle: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 },
+  heading: { flex: 1, fontSize: 18, fontWeight: '700' },
+  detail: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, paddingVertical: 12 },
+  label: { width: 60, fontSize: 14, lineHeight: 21, fontWeight: '700' },
+  value: { flex: 1, minWidth: 0, fontSize: 14, lineHeight: 21 },
 });

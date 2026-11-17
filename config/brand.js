@@ -1,8 +1,9 @@
 export const BRAND = {
-  name: 'LabHub',
-  title: 'BSCS 4A',
-  subtitle: 'Mobile Lab Hub',
-  course: 'BSCS 4A',
+  name: 'CodeLab',
+  fullName: 'CodeLab – Laboratory Activities Compilation App',
+  subtitle: 'Your Laboratory Activities Compilation',
+  description: 'React Native Laboratory Compilation App',
   developers: 'Daisy Galope & Julius Galope',
-  project: 'Hands-on Activity (By Pair)',
+  course: 'BSCS 4A',
+  version: '1.0.0',
 };

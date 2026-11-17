@@ -1,1 +1,1 @@
-export { default } from '../../../components/MainTabs';
+export { BottomTabs as default } from '../../../navigation/AppNavigator';

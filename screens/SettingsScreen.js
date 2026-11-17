@@ -1,58 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import { CodeXml, Info, Moon, Palette, UserRound, ChevronRight, X } from 'lucide-react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import Screen from '../components/Screen';
-import Surface from '../components/Surface';
-import MenuRow from '../components/MenuRow';
-import AppButton from '../components/AppButton';
-import ProfileField from '../components/ProfileField';
+import MemberCard from '../components/MemberCard';
 import ThemeSwitch from '../components/ThemeSwitch';
 import { useAppTheme } from '../context/ThemeContext';
 import { BRAND } from '../config/brand';
 
 export default function SettingsScreen() {
-  const { theme, toggleTheme, profileName, setProfileName } = useAppTheme();
-  const [showTheme, setShowTheme] = useState(false);
-  return (
-    <Screen>
-      <Pressable accessibilityRole="button" accessibilityLabel="Edit pair profile" onPress={() => router.push('/pair-profile')} style={({ pressed }) => [styles.profile, { backgroundColor: theme.card, borderColor: theme.border, opacity: pressed ? 0.7 : 1 }]}>
-        <LinearGradient colors={['#BD91FF', '#7443DB']} style={styles.avatar}><UserRound color="#FFFFFF" size={30} strokeWidth={1.8} /></LinearGradient>
-        <View style={{ flex: 1, gap: 5 }}><Text style={[styles.name, { color: theme.text }]}>{profileName.trim() || 'Student'}</Text><Text style={{ color: theme.secondary, fontSize: 13 }}>{BRAND.course}</Text></View>
-        <ChevronRight size={21} color={theme.secondary} />
-      </Pressable>
-      <Text style={[styles.section, { color: theme.text }]}>App Preferences</Text>
-      <Surface style={{ paddingVertical: 15 }}>
-        <View style={styles.row}>
-          <Moon size={23} color={theme.primary} />
-          <Text style={[styles.label, { color: theme.text }]}>Dark Mode</Text>
-          <ThemeSwitch />
-        </View>
-      </Surface>
-      <MenuRow icon={Palette} title="Theme" subtitle="Indigo & violet" onPress={() => setShowTheme(previous => !previous)} />
-      {showTheme && <Surface>
-        <View style={styles.row}><Text style={[styles.label, { color: theme.text }]}>Purple workspace</Text><Pressable accessibilityRole="button" accessibilityLabel="Close theme details" onPress={() => setShowTheme(false)} hitSlop={12}><X size={20} color={theme.secondary} /></Pressable></View>
-        <View style={styles.row}>{['#6040C2', '#7443DB', '#9C63E7', '#C39AFF'].map(color => <View key={color} style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: color }} />)}</View>
-        <Text style={[styles.note, { color: theme.secondary }]}>The same indigo and violet palette adapts instantly to light and dark appearance.</Text>
-        <AppButton title={theme.isDark ? 'Use Light Mode' : 'Use Dark Mode'} onPress={toggleTheme} secondary />
-      </Surface>}
-      <ProfileField label="Dashboard name" placeholder="e.g. Daisy Galope" value={profileName} onChangeText={setProfileName} autoComplete="name" />
-      <Text style={[styles.section, { color: theme.text }]}>About</Text>
-      <MenuRow icon={Info} title="App Information" onPress={() => router.push('/about')} />
-      <MenuRow icon={CodeXml} title="Developers" subtitle={BRAND.developers} onPress={() => router.push('/pair-profile')} />
-      <Text style={[styles.footer, { color: theme.secondary }]}>LabHub v1.0 · {BRAND.course}{'\n'}Preferences are saved for this session.</Text>
-    </Screen>
-  );
+  const { theme } = useAppTheme();
+  return <Screen contentStyle={{ paddingTop: 8 }}>
+    <View style={[styles.card, { backgroundColor: theme.card }]}>
+      <View style={[styles.icon, { backgroundColor: theme.muted }]}><Ionicons name="moon-outline" size={25} color={theme.text} /></View>
+      <View style={styles.copy}>
+        <Text style={[styles.title, { color: theme.text }]}>Dark Mode</Text>
+        <Text style={[styles.subtitle, { color: theme.secondary }]}>Use dark appearance</Text>
+      </View>
+      <ThemeSwitch />
+    </View>
+    <MemberCard settings />
+    <Pressable accessibilityRole="button" accessibilityLabel="About CodeLab" onPress={() => router.push('/about')} style={({ pressed }) => [styles.card, { backgroundColor: theme.card, opacity: pressed ? 0.7 : 1 }]}>
+      <Ionicons name="information-circle-outline" size={27} color={theme.text} />
+      <View style={styles.copy}>
+        <Text style={[styles.title, { color: theme.text }]}>About CodeLab</Text>
+        <Text style={[styles.subtitle, { color: theme.secondary }]}>{BRAND.description}</Text>
+        <Text style={[styles.version, { color: theme.secondary }]}>Version {BRAND.version}</Text>
+      </View>
+      <Ionicons name="chevron-forward" size={19} color={theme.secondary} />
+    </Pressable>
+  </Screen>;
 }
 
 const styles = StyleSheet.create({
-  profile: { padding: 18, borderWidth: 1, borderRadius: 20, flexDirection: 'row', alignItems: 'center', gap: 14 },
-  avatar: { width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center' },
-  name: { fontSize: 18, fontWeight: '800' },
-  section: { fontSize: 16, fontWeight: '700', marginTop: 10 },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 14 },
-  label: { flex: 1, fontSize: 14, fontWeight: '600' },
-  note: { fontSize: 13, lineHeight: 21 },
-  footer: { textAlign: 'center', fontSize: 11, lineHeight: 19, marginTop: 12 },
+  card: { flexDirection: 'row', alignItems: 'center', padding: 18, borderRadius: 18, gap: 14, minHeight: 84 },
+  icon: { width: 36, height: 36, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
+  copy: { flex: 1, gap: 5 },
+  title: { fontSize: 15, lineHeight: 21, fontWeight: '700' },
+  subtitle: { fontSize: 13, lineHeight: 19 },
+  version: { fontSize: 11, lineHeight: 17 },
 });
